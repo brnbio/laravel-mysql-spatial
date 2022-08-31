@@ -1,10 +1,10 @@
 <?php
 
-namespace Grimzy\LaravelMysqlSpatial\Types;
+namespace Brnbio\LaravelMysqlSpatial\Types;
 
 use GeoJson\GeoJson;
 use GeoJson\Geometry\Point as GeoJsonPoint;
-use Grimzy\LaravelMysqlSpatial\Exceptions\InvalidGeoJsonException;
+use Brnbio\LaravelMysqlSpatial\Exceptions\InvalidGeoJsonException;
 
 class Point extends Geometry
 {
@@ -70,7 +70,7 @@ class Point extends Geometry
     /**
      * @param $geoJson  \GeoJson\Feature\Feature|string
      *
-     * @return \Grimzy\LaravelMysqlSpatial\Types\Point
+     * @return \Brnbio\LaravelMysqlSpatial\Types\Point
      */
     public static function fromJson($geoJson)
     {
