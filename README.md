@@ -1,16 +1,15 @@
 # Laravel MySQL Spatial extension
 
-[![Build Status](https://img.shields.io/travis/grimzy/laravel-mysql-spatial.svg?style=flat-square)](https://travis-ci.org/grimzy/laravel-mysql-spatial)
-[![Code Climate](https://img.shields.io/codeclimate/maintainability/grimzy/laravel-mysql-spatial.svg?style=flat-square)](https://codeclimate.com/github/grimzy/laravel-mysql-spatial/maintainability)
-[![Code Climate](https://img.shields.io/codeclimate/c/grimzy/laravel-mysql-spatial.svg?style=flat-square&colorB=4BCA2A)](https://codeclimate.com/github/grimzy/laravel-mysql-spatial/test_coverage) [![Packagist](https://img.shields.io/packagist/v/grimzy/laravel-mysql-spatial.svg?style=flat-square)](https://packagist.org/packages/grimzy/laravel-mysql-spatial)
-[![Packagist](https://img.shields.io/packagist/dt/grimzy/laravel-mysql-spatial.svg?style=flat-square)](https://packagist.org/packages/grimzy/laravel-mysql-spatial) [![StyleCI](https://github.styleci.io/repos/83766141/shield?branch=master)](https://github.styleci.io/repos/83766141) 
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](LICENSE)
 
-Laravel package to easily work with [MySQL Spatial Data Types](https://dev.mysql.com/doc/refman/8.0/en/spatial-type-overview.html) and [MySQL Spatial Functions](https://dev.mysql.com/doc/refman/8.0/en/spatial-function-reference.html).
+Laravel package to easily work with
+[MySQL Spatial Data Types](https://dev.mysql.com/doc/refman/8.0/en/spatial-type-overview.html) and [MySQL Spatial Functions](https://dev.mysql.com/doc/refman/8.0/en/spatial-function-reference.html).
 
-Please check the documentation for your MySQL version. MySQL's Extension for Spatial Data was added in MySQL 5.5 but many Spatial Functions were changed in 5.6 and 5.7.
+Please check the documentation for your MySQL version. MySQL's Extension for Spatial Data 
+was added in MySQL 5.5 but many Spatial Functions were changed in 5.6 and 5.7.
 
-This package also works with MariaDB. Please refer to the [MySQL/MariaDB Spatial Support Matrix](https://mariadb.com/kb/en/library/mysqlmariadb-spatial-support-matrix/) for compatibility.
+This package also works with MariaDB. Please refer to the 
+[MySQL/MariaDB Spatial Support Matrix](https://mariadb.com/kb/en/library/mysqlmariadb-spatial-support-matrix/) for compatibility.
 
 ## Installation
 
@@ -27,31 +26,31 @@ $ composer require brnbio/laravel-mysql-spatial
 From the command line:
 
 ```shell
-php artisan make:migration create_places_table
+php artisan make:migration createPlacesTable
 ```
 
-Then edit the migration you just created by adding at least one spatial data field. For Laravel versions prior to 5.5, you can use the Blueprint provided by this package (Brnbio\LaravelMysqlSpatial\Schema\Blueprint):
+Then edit the migration you just created by adding at least one spatial data field.
 
 ```php
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreatePlacesTable extends Migration {
-
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('places', function(Blueprint $table)
-        {
-            $table->increments('id');
-            $table->string('name')->unique();
-            // Add a Point spatial data field named location
+        Schema::create('places', function(Blueprint $table) {
+            $table->id();
+            $table->string('name');
             $table->point('location')->nullable();
-            // Add a Polygon spatial data field named area
             $table->polygon('area')->nullable();
             $table->timestamps();
         });
@@ -60,8 +59,8 @@ class CreatePlacesTable extends Migration {
   
         // Schema::create('places', function(Blueprint $table)
         // {
-        //     $table->increments('id');
-        //     $table->string('name')->unique();
+        //     $table->id();
+        //     $table->string('name');
         //     // Add a Point spatial data field named location with SRID 4326
         //     $table->point('location', 4326)->nullable();
         //     // Add a Polygon spatial data field named area with SRID 4326
@@ -75,11 +74,11 @@ class CreatePlacesTable extends Migration {
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::drop('places');
+        Schema::dropIfExists('places');
     }
-}
+};
 ```
 
 Run the migration:

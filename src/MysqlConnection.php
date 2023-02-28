@@ -1,15 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Brnbio\LaravelMysqlSpatial;
 
-use Doctrine\DBAL\Types\Type as DoctrineType;
 use Brnbio\LaravelMysqlSpatial\Schema\Builder;
 use Brnbio\LaravelMysqlSpatial\Schema\Grammars\MySqlGrammar;
-use Illuminate\Database\MySqlConnection as IlluminateMySqlConnection;
+use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Types\Type as DoctrineType;
+use Illuminate\Database\Grammar;
+use Illuminate\Database\MySqlConnection as Connection;
+use Illuminate\Database\Schema\MySqlBuilder;
 
-class MysqlConnection extends IlluminateMySqlConnection
+/**
+ * Class MysqlConnection
+ *
+ * @package Brnbio\LaravelMysqlSpatial
+ */
+class MysqlConnection extends Connection
 {
-    public function __construct($pdo, $database = '', $tablePrefix = '', array $config = [])
+    /**
+     * @param $pdo
+     * @param string $database
+     * @param string $tablePrefix
+     * @param array $config
+     * @throws Exception
+     */
+    public function __construct($pdo, string $database = '', string $tablePrefix = '', array $config = [])
     {
         parent::__construct($pdo, $database, $tablePrefix, $config);
 
@@ -26,7 +43,7 @@ class MysqlConnection extends IlluminateMySqlConnection
                 'geometrycollection',
                 'geomcollection',
             ];
-            $dbPlatform = $this->getDoctrineSchemaManager()->getDatabasePlatform();
+            $dbPlatform = $this->getDoctrineConnection()->getDatabasePlatform();
             foreach ($geometries as $type) {
                 $dbPlatform->registerDoctrineTypeMapping($type, 'string');
             }
@@ -36,9 +53,9 @@ class MysqlConnection extends IlluminateMySqlConnection
     /**
      * Get the default schema grammar instance.
      *
-     * @return \Illuminate\Database\Grammar
+     * @return Grammar
      */
-    protected function getDefaultSchemaGrammar()
+    protected function getDefaultSchemaGrammar(): Grammar
     {
         return $this->withTablePrefix(new MySqlGrammar());
     }
@@ -46,9 +63,9 @@ class MysqlConnection extends IlluminateMySqlConnection
     /**
      * Get a schema builder instance for the connection.
      *
-     * @return \Illuminate\Database\Schema\MySqlBuilder
+     * @return MySqlBuilder|Builder
      */
-    public function getSchemaBuilder()
+    public function getSchemaBuilder(): MySqlBuilder|Builder
     {
         if (is_null($this->schemaGrammar)) {
             $this->useDefaultSchemaGrammar();

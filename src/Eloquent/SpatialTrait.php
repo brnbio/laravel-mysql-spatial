@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Brnbio\LaravelMysqlSpatial\Eloquent;
 
 use Brnbio\LaravelMysqlSpatial\Exceptions\SpatialFieldsNotDefinedException;
@@ -40,9 +42,15 @@ trait SpatialTrait
      * protected $spatialFields = [];
      */
 
-    public $geometries = [];
+    /**
+     * @var array
+     */
+    public array $geometries = [];
 
-    protected $stRelations = [
+    /**
+     * @var string[]
+     */
+    protected array $stRelations = [
         'within',
         'crosses',
         'contains',
@@ -53,7 +61,10 @@ trait SpatialTrait
         'touches',
     ];
 
-    protected $stOrderFunctions = [
+    /**
+     * @var string[]
+     */
+    protected array $stOrderFunctions = [
         'distance',
         'distance_sphere',
     ];
@@ -63,9 +74,9 @@ trait SpatialTrait
      *
      * @param \Illuminate\Database\Query\Builder $query
      *
-     * @return \Brnbio\LaravelMysqlSpatial\Eloquent\Builder
+     * @return Builder
      */
-    public function newEloquentBuilder($query)
+    public function newEloquentBuilder($query): Builder
     {
         return new Builder($query);
     }

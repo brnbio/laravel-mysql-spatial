@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Brnbio\LaravelMysqlSpatial;
 
-use Doctrine\DBAL\Types\Type as DoctrineType;
 use Brnbio\LaravelMysqlSpatial\Connectors\ConnectionFactory;
 use Brnbio\LaravelMysqlSpatial\Doctrine\Geometry;
 use Brnbio\LaravelMysqlSpatial\Doctrine\GeometryCollection;
@@ -12,20 +13,23 @@ use Brnbio\LaravelMysqlSpatial\Doctrine\MultiPoint;
 use Brnbio\LaravelMysqlSpatial\Doctrine\MultiPolygon;
 use Brnbio\LaravelMysqlSpatial\Doctrine\Point;
 use Brnbio\LaravelMysqlSpatial\Doctrine\Polygon;
+use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Types\Type as DoctrineType;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\DatabaseServiceProvider;
 
 /**
- * Class DatabaseServiceProvider.
+ * Class SpatialServiceProvider
+ *
+ * @package Brnbio\LaravelMysqlSpatial
  */
 class SpatialServiceProvider extends DatabaseServiceProvider
 {
     /**
-     * Register the service provider.
-     *
      * @return void
+     * @throws Exception
      */
-    public function register()
+    public function register(): void
     {
         // The connection factory is used to create the actual connection instances on
         // the database. We will inject the factory into the manager so that it may
@@ -55,7 +59,7 @@ class SpatialServiceProvider extends DatabaseServiceProvider
             ];
             $typeNames = array_keys(DoctrineType::getTypesMap());
             foreach ($geometries as $type => $class) {
-                if (!in_array($type, $typeNames)) {
+                if ( !in_array($type, $typeNames)) {
                     DoctrineType::addType($type, $class);
                 }
             }
